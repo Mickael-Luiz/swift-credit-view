@@ -1,22 +1,32 @@
-.container-cliente {
-  
-  .span-filtro {
-    font-size: 28px;
-    color: rgb(71, 71, 71);
-    font-weight: bold;
-  }
+::ng-deep {
 
-  .container-filtro {
-    height: 50px;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0px 0px 20px rgba(156, 212, 255, .3);
-  }
-  
-  .container-tabela {
-    min-height: 400px;
-    width: 100%;
-    background-color: white;
-    box-shadow: 0px 0px 20px rgba(156, 212, 255, .3);
+  .container-cliente {
+
+    .span-filtro {
+      font-size: 28px;
+      color: rgb(71, 71, 71);
+      font-weight: bold;
+    }
+
+    .container-filtro {
+      height: 55px;
+      width: 100%;
+      padding: 0 15px;
+      background-color: white;
+      box-shadow: 0px 0px 20px rgba(156, 212, 255, .3);
+      
+      .p-multiselect-header {
+        display: none;
+      }
+
+    }
+
+    .container-tabela {
+      min-height: 400px;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0px 0px 20px rgba(156, 212, 255, .3);
+    }
+
   }
 }

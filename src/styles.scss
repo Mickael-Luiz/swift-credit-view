@@ -28,6 +28,51 @@ button:focus {
     box-shadow: none;
 }
 
+input,
+button {
+    height: 32.5px;
+    border-radius: 3px;
+}
+
+.p-button.p-button-text:not(:disabled):hover,
+.p-button.p-button-outlined:not(:disabled):hover {
+    background: rgb(59, 130, 246);
+    color: white;
+}
+
+.pi.pi-search {
+    padding-top: 2px;
+    font-size: 14px;
+}
+
+div.p-element.p-multiselect-label-container>div {
+    display: flex;
+    height: 32.5px;
+    padding: 0 5px;
+    align-items: center;
+}
+
+tr {
+    p-tableheadercheckbox {
+        div.p-checkbox-box {
+            height: 17.5px;
+            width: 17.5px;
+        }
+    }
+    p-tablecheckbox {
+        div.p-checkbox-box {
+            height: 17.5px;
+            width: 17.5px;
+        }
+    }
+    td, th {
+        height: 39.5;
+        padding: 10.5px 14px;
+        font-size: 14px;
+        border: none;
+    }
+}
+
 ::ng-deep.swal2-container {
     z-index: 1000000;
 }
