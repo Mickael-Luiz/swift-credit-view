@@ -73,6 +73,15 @@ tr {
     }
 }
 
+.p-button-rounded {
+    border-radius: 50%;
+    height: 32.5px;
+    width: 32.5px;
+}
+.p-button.p-button-danger.p-button-text:not(:disabled):hover, .p-button.p-button-outlined:not(:disabled):hover {
+    background: red;
+}
+
 ::ng-deep.swal2-container {
     z-index: 1000000;
 }
