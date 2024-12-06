@@ -17,11 +17,11 @@
       </div>
     </div>
     <div class="adicionar-exportar flex gap-3">
-      <p-button label="Adicionar" [raised]="true" icon="pi pi-plus"  />
-      <p-button label="Exportar" [raised]="true" icon="pi pi-file-export"  />
+      <p-button label="Adicionar" [raised]="true" icon="pi pi-plus" />
+      <p-button label="Exportar" [raised]="true" icon="pi pi-file-export" />
     </div>
   </div>
-  <div class="container-tabela">
+  <div class="container-tabela flex flex-column justify-content-between">
     <p-table [value]="clientes" [(selection)]="clientesSelecionados" dataKey="id" styleClass="p-datatable-striped"
       [tableStyle]="{'min-width': '50rem'}">
       <ng-template pTemplate="header">
@@ -52,6 +52,8 @@
         </tr>
       </ng-template>
     </p-table>
+    <p-paginator (onPageChange)="getClientesPaginado($event)" [first]="1" [rows]="rows" [totalRecords]="totalElements"
+      [rowsPerPageOptions]="[5, 7, 10]" [style.font-size]="'12px'"/>
   </div>
 
 </div>

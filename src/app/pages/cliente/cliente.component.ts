@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-cliente',
@@ -19,7 +20,8 @@ import { TableModule } from 'primeng/table';
     InputTextModule,
     ButtonModule,
     MultiSelectModule,
-    TableModule
+    TableModule,
+    PaginatorModule
   ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
@@ -29,16 +31,26 @@ export class ClienteComponent {
   clientes: ICliente[] = [];
   clientesSelecionados: ICliente[] = []
   niveisConfiabilidade = [
-    {id: 1, desc: 'Baixa'},
-    {id: 2, desc: 'Média'},
-    {id: 3, desc: 'Alta'}
+    { id: 1, desc: 'Baixa' },
+    { id: 2, desc: 'Média' },
+    { id: 3, desc: 'Alta' }
   ];
+
+  first: number = 0;
+  totalElements: number = 0;
+  rows: number = 5;
 
   constructor(private clienteService: ClienteService) { }
 
   ngOnInit(): void {
-    this.clienteService.getClientes().subscribe((data) => {
-      this.clientes = data;
+    this.getClientesPaginado()
+  }
+
+  getClientesPaginado(infoPage?: any) {
+    console.log(infoPage);
+    this.clienteService.getClientes(infoPage).subscribe((data) => {
+      this.clientes = data.content;
+      this.totalElements = data.totalElements;
     })
   }
 
