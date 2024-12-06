@@ -13,7 +13,12 @@ export class ClienteService {
 
   constructor(private http: HttpClient) {}
 
-  getClientes(infoPage: any): Observable<IPage<ICliente>> {
-    return this.http.get<IPage<ICliente>>(`${this.apiUrl}/paginado?page=${infoPage ? infoPage.page : 0}&size=${infoPage ? infoPage.rows : 10}&sort=id,desc`);
+  getClientes(infoPage: any, filtro?: string): Observable<IPage<ICliente>> {
+    const params = {
+      page: infoPage.page || 0,
+      size: infoPage.rows || 10,
+      filtro: filtro || ''
+    };
+    return this.http.get<IPage<ICliente>>(`${this.apiUrl}/paginado?sort=${infoPage.sort || 'id,desc'}`, {params});
   }
 }

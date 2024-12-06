@@ -11,12 +11,14 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { PhonePipe } from '../../pipes/phone.pipe';
 import { ConfiabilidadeColorPipe } from '../../pipes/confiabilidade-color.pipe';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cliente',
   standalone: true,
   imports: [
     HttpClientModule,
+    ReactiveFormsModule,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
@@ -40,21 +42,49 @@ export class ClienteComponent {
     { id: 3, desc: 'Alta' }
   ];
 
-  first: number = 0;
+  formFiltro!: FormGroup
+
   totalElements: number = 0;
   rows: number = 10;
+  page: number = 0;
 
-  constructor(private clienteService: ClienteService) { }
+
+
+
+  constructor(
+    private clienteService: ClienteService,
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
+    this.startFormFiltro()
     this.getClientesPaginado()
   }
 
+  
+  changePaginator(event: any) {
+    this.rows = event.rows;
+    this.page = event.page
+    this.getClientesPaginado(event)
+  }
+  
   getClientesPaginado(infoPage?: any) {
-    this.clienteService.getClientes(infoPage).subscribe((data) => {
+    infoPage = infoPage ? infoPage : {rows: this.rows, page: this.page, sort: 'id,desc'}
+    this.clienteService.getClientes(infoPage, this.formFiltro.value.search).subscribe((data) => {
       this.clientes = data.content;
       this.totalElements = data.totalElements;
     })
+  }
+  
+  startFormFiltro() {
+    this.formFiltro = this.fb.group({
+      search: ['']
+    })
+  }
+  
+  limparFormFiltro() {
+    this.formFiltro.get('search')?.setValue('')
+    this.getClientesPaginado()
   }
 
 }
