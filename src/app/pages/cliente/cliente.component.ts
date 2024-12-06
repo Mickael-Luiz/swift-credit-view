@@ -10,8 +10,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { PhonePipe } from '../../pipes/phone.pipe';
-import { ConfiabilidadeColorPipe } from '../../pipes/confiabilidade-color.pipe';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AvaliacaoPipe } from '../../pipes/avaliacao.pipe';
 
 @Component({
   selector: 'app-cliente',
@@ -27,7 +27,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     TableModule,
     PaginatorModule,
     PhonePipe,
-    ConfiabilidadeColorPipe
+    AvaliacaoPipe
   ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'

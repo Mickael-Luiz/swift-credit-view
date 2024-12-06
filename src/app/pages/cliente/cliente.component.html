@@ -28,9 +28,9 @@
         <tr>
           <th style="width: 5%;"><p-tableHeaderCheckbox /></th>
           <th style="width: 8%;">Código</th>
-          <th style="width: 45%;">Nome</th>
+          <th style="width: 40%;">Nome</th>
           <th style="width: 10%;">Telefone</th>
-          <th style="width: 10%; text-align: center;">Confiabilidade</th>
+          <th style="width: 15%; text-align: center;">Confiabilidade</th>
           <th style="width: 12%; text-align: center;">Débito</th>
           <th style="width: 10%;">Ações</th>
         </tr>
@@ -41,14 +41,11 @@
             <p-tableCheckbox [value]="cliente" />
           </td>
           <td style="width: 8%;">{{cliente.id}}</td>
-          <td style="width: 45%;">{{cliente.nome}}</td>
+          <td style="width: 40%;">{{cliente.nome}}</td>
           <td style="width: 10%;">{{cliente.telefone | phone}}</td>
-          <td style="width: 10%; text-align: center;">
+          <td style="width: 15%; text-align: center;">
             <span class="status"
-              style="display: inline-block; align-items: center;"
-              [style.background-color]="cliente.confiabilidade | confiabilidadeColor: 'backgroundColor' "
-              [style.color]="cliente.confiabilidade | confiabilidadeColor: 'color' ">
-              {{cliente.confiabilidade}}
+              style="display: inline-block; align-items: center; width: 100%;" [innerHTML]="cliente.confiabilidade | avaliacaoPipe">
             </span>
           </td>
           <td style="width: 12%; text-align: center;">R$ {{cliente.debito}}</td>
