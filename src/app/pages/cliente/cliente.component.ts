@@ -9,6 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
+import { PhonePipe } from '../../pipes/phone.pipe';
+import { ConfiabilidadeColorPipe } from '../../pipes/confiabilidade-color.pipe';
 
 @Component({
   selector: 'app-cliente',
@@ -21,7 +23,9 @@ import { PaginatorModule } from 'primeng/paginator';
     ButtonModule,
     MultiSelectModule,
     TableModule,
-    PaginatorModule
+    PaginatorModule,
+    PhonePipe,
+    ConfiabilidadeColorPipe
   ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
@@ -38,7 +42,7 @@ export class ClienteComponent {
 
   first: number = 0;
   totalElements: number = 0;
-  rows: number = 5;
+  rows: number = 10;
 
   constructor(private clienteService: ClienteService) { }
 
@@ -47,7 +51,6 @@ export class ClienteComponent {
   }
 
   getClientesPaginado(infoPage?: any) {
-    console.log(infoPage);
     this.clienteService.getClientes(infoPage).subscribe((data) => {
       this.clientes = data.content;
       this.totalElements = data.totalElements;

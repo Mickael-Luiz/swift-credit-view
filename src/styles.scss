@@ -59,18 +59,45 @@ tr {
             width: 17.5px;
         }
     }
+
     p-tablecheckbox {
         div.p-checkbox-box {
             height: 17.5px;
             width: 17.5px;
         }
     }
-    td, th {
-        height: 39.5;
-        padding: 10.5px 14px;
+
+    td,
+    th {
+        height: 39.5 !important;
+        padding: 8px 14px;
         font-size: 14px;
         border: none;
     }
+
+    .p-button-rounded {
+        border-radius: 50%;
+        height: 26px;
+        width: 26px;
+        font-size: 12px;
+    }
+
+    .pi-pencil:before {
+        content: "\e942";
+        font-size: 13px;
+        position: absolute;
+        top: 6px;
+        left: 6px;
+    }
+
+    .pi-trash:before {
+        content: "\e93D";
+        font-size: 13px;
+        position: absolute;
+        top: 6px;
+        left: 6px;
+    }
+
 }
 
 .p-button-rounded {
@@ -78,7 +105,9 @@ tr {
     height: 32.5px;
     width: 32.5px;
 }
-.p-button.p-button-danger.p-button-text:not(:disabled):hover, .p-button.p-button-outlined:not(:disabled):hover {
+
+.p-button.p-button-danger.p-button-text:not(:disabled):hover,
+.p-button.p-button-outlined:not(:disabled):hover {
     background: red;
 }
 

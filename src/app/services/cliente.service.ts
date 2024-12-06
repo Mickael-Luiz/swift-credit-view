@@ -14,6 +14,6 @@ export class ClienteService {
   constructor(private http: HttpClient) {}
 
   getClientes(infoPage: any): Observable<IPage<ICliente>> {
-    return this.http.get<IPage<ICliente>>(`${this.apiUrl}/paginado?page=${infoPage ? infoPage.page : 0}&size=${infoPage ? infoPage.rows : 5}&sort=id,desc`);
+    return this.http.get<IPage<ICliente>>(`${this.apiUrl}/paginado?page=${infoPage ? infoPage.page : 0}&size=${infoPage ? infoPage.rows : 10}&sort=id,desc`);
   }
 }
