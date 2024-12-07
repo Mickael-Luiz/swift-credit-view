@@ -4,7 +4,7 @@ import { provideRouter, RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 
 export const appConfig: ApplicationConfig = {
@@ -14,5 +14,7 @@ export const appConfig: ApplicationConfig = {
     HttpClientModule,
     BrowserModule,
     ReactiveFormsModule
-  )]
+  ),
+  provideHttpClient(withFetch())
+]
 };

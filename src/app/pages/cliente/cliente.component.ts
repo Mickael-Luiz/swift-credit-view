@@ -11,7 +11,7 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { PhonePipe } from '../../pipes/phone.pipe';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { AvaliacaoPipe } from '../../pipes/avaliacao.pipe';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-cliente',
@@ -27,7 +27,7 @@ import { AvaliacaoPipe } from '../../pipes/avaliacao.pipe';
     TableModule,
     PaginatorModule,
     PhonePipe,
-    AvaliacaoPipe
+    DialogModule
   ],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
@@ -85,6 +85,14 @@ export class ClienteComponent {
   limparFormFiltro() {
     this.formFiltro.get('search')?.setValue('')
     this.getClientesPaginado()
+  }
+
+  filledStars(confiabilidade: number): number[] {
+    return Array.from({ length: confiabilidade }, () => 0);
+  }
+  
+  emptyStars(confiabilidade: number): number[] {
+    return Array.from({ length: 5 - confiabilidade }, () => 0);
   }
 
 }

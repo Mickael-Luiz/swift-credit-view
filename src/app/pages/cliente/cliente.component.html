@@ -44,8 +44,13 @@
           <td style="width: 40%;">{{cliente.nome}}</td>
           <td style="width: 10%;">{{cliente.telefone | phone}}</td>
           <td style="width: 15%; text-align: center;">
-            <span class="status"
-              style="display: inline-block; align-items: center; width: 100%;" [innerHTML]="cliente.confiabilidade | avaliacaoPipe">
+            <span class="status" style="display: inline-block; align-items: center; width: 100%;">
+              @for(star of filledStars(cliente.confiabilidade); track star) {
+                <i class="pi pi-star-fill" style="font-size: 13px; color: yellow;"></i>
+              }
+              @for(star of emptyStars(cliente.confiabilidade); track star) {
+                <i class="pi pi-star" style="font-size: 13px;"></i>
+              }
             </span>
           </td>
           <td style="width: 12%; text-align: center;">R$ {{cliente.debito}}</td>
@@ -59,5 +64,5 @@
     <p-paginator (onPageChange)="changePaginator($event)" [first]="1" [rows]="rows" [totalRecords]="totalElements"
       [rowsPerPageOptions]="[5, 7, 10, 20]" [style.font-size]="'12px'" />
   </div>
-
 </div>
+
