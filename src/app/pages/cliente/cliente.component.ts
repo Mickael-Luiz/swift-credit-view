@@ -15,6 +15,9 @@ import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputMaskModule } from 'primeng/inputmask';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-cliente',
@@ -33,8 +36,11 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     DialogModule,
     FloatLabelModule,
     InputMaskModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    ToastModule,
+    ConfirmDialogModule
   ],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.scss'
 })
@@ -62,7 +68,9 @@ export class ClienteComponent {
 
   constructor(
     private clienteService: ClienteService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
@@ -107,15 +115,17 @@ export class ClienteComponent {
   abrirDialogClientes(id?: number) {
     this.titleDialog = 'Novo Cliente';
     this.dialogFormCliente = true;
-    if(id) {
+    if (id) {
       this.titleDialog = 'Editando Cliente';
       this.buscarClientePorId(id);
+      this.idClienteEditando = id;
     }
   }
 
   fecharDialogClientes() {
     this.dialogFormCliente = false
     this.formCliente.reset()
+    this.idClienteEditando = null
   }
 
   filledStars(confiabilidade: number): number[] {
@@ -169,34 +179,61 @@ export class ClienteComponent {
     this.formCliente.get('telefone')?.setValue(this.formCliente.value.telefone.replace(/\D/g, ''));
   }
 
-  salvarCliente(id?: number) {
+  salvarCliente() {
     this.prepararCamposForm();
     if (this.formCliente.valid) {
-      this.clienteService.salvarCliente(this.formCliente.value).subscribe({
-        next: () => {
-          this.buscarClientesPaginado();
-          this.fecharDialogClientes();
-          alert('cliente salvo com sucesso');
-        },
-        error: err => {
-          console.error('Erro ao salvar o cliente: ', err);
-          alert('Erro ao salvar cliente');
-        }
-      })
-      console.log(this.formCliente.value);
+      if (!this.idClienteEditando) {
+        this.clienteService.salvarCliente(this.formCliente.value).subscribe({
+          next: () => {
+            this.buscarClientesPaginado();
+            this.fecharDialogClientes();
+            this.messageService.add({ severity: 'success', summary: 'Concluído', detail: 'Cliente salvo com sucesso' });
+          },
+          error: err => {
+            this.messageService.add({ severity: 'danger', summary: 'Falha', detail: 'Erro ao salvar cliente' });
+          }
+        })
+        return;
+      } else {
+        this.confirmationService.confirm({
+          message: 'Deseja Salvar as Alterações do Cliente?',
+          header: 'Confirmação',
+          accept: () => {
+            this.clienteService.salvarCliente(this.formCliente.value).subscribe({
+              next: () => {
+                this.buscarClientesPaginado();
+                this.fecharDialogClientes();
+                this.messageService.add({ severity: 'success', summary: 'Concluído', detail: 'Cliente salvo com sucesso' });
+              },
+              error: err => {
+                this.messageService.add({ severity: 'danger', summary: 'Falha', detail: 'Erro ao salvar cliente' });
+              }
+            })
+          }
+        });
+      }
     } else {
-      alert('Por favor, preencha todos os campos obrigatórios');
+      this.messageService.add({ severity: 'danger', summary: 'Observação', detail: 'Por favor, preencha todos os campos obrigatórios' });
     }
   }
-
+  
   deletarCliente(id: number, nome: string) {
-    this.clienteService.deletarCliente(id).subscribe({
-      next: () => {
-        this.buscarClientesPaginado();
-        alert('Cliente '+nome+' deletado com sucesso');
+    this.confirmationService.confirm({
+      message: 'Deseja Deletar o Cliente '+nome+'?',
+      header: 'Confirmação',
+      accept: () => {
+        this.clienteService.deletarCliente(id).subscribe({
+          next: () => {
+            this.buscarClientesPaginado();
+            this.messageService.add({ severity: 'success', summary: 'Concluído', detail: 'Cliente ' + nome + ' deletado com sucesso' });
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'danger', summary: 'Falha', detail: 'Falha ao deletar o cliente ' + nome });
+          }
+        })
       },
-      error: (err) => {
-        alert('Falha ao deletar o cliente '+nome);
+      reject: () => {
+        return;
       }
     })
   }
