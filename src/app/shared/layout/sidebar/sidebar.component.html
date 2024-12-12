@@ -1,5 +1,9 @@
 <div class="container" (mouseover)="expandirMenu()" (mouseout)="retrairMenu()">
 
+  <div class="perfil-container">
+    <img src="../../../../assets/images/PerfilSC.png" alt="Perfil">
+  </div>
+
   <div class="links">
 
     @for(link of listaMenu; track link) {
@@ -14,6 +18,10 @@
 
   <div class="extensao-menu" [class]="menuAberto ? 'menu-aberto' : 'menu-fechado' ">
 
+    <div class="perfil-container">
+      
+    </div>
+
     <div class="links">
 
       <div class="content-link" (click)="setRota('/graficos')">
@@ -25,9 +33,6 @@
       </div>
 
 
-    </div>
-
-    <div class="saida">
     </div>
 
   </div>

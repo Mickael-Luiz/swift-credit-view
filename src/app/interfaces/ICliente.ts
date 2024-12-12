@@ -8,14 +8,17 @@ export interface ICliente {
   complemento: string,
   numero: string,
   confiabilidade: string,
-  recomendante: number,
-  debito: number
+  recomendante: IClienteDTO,
 }
 
 export interface IClienteDTO {
   id: number,
   nome: string,
   telefone: string,
-  confiabilidade: string,
-  debito: number
+  confiabilidade: string
+}
+
+export interface IClienteDropdownDTO {
+  id: number,
+  nome: string
 }

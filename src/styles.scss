@@ -28,6 +28,7 @@ button:focus {
     box-shadow: none;
 }
 
+//Alterações de componentes do primeng
 input,
 button {
     height: 32.5px;
@@ -45,11 +46,17 @@ button {
     font-size: 14px;
 }
 
-div.p-element.p-multiselect-label-container>div {
+div.p-element.p-multiselect-label-container>div, .p-dropdown, .p-autocomplete {
     display: flex;
     height: 32.5px;
-    padding: 0 5px;
+    // padding: 0 5px;
     align-items: center;
+}
+
+form {
+    input, .p-dropdown {
+        width: 100%;
+    }
 }
 
 tr {
@@ -71,7 +78,7 @@ tr {
     th {
         height: 39.5 !important;
         padding: 8px 14px;
-        font-size: 14px;
+        font-size: 13px;
         border: none;
     }
 
@@ -106,9 +113,17 @@ tr {
     width: 32.5px;
 }
 
-.p-button.p-button-danger.p-button-text:not(:disabled):hover,
-.p-button.p-button-outlined:not(:disabled):hover {
+.p-button.p-button-danger.p-button-text:not(:disabled):hover {
     background: red;
+}
+.p-button.p-button-secondary {
+    color: #475569;
+    background-color: #f1f5f9;
+    border: none;
+}
+.p-button.p-button-secondary:hover {
+    background-color: #e2e8f0;
+    color: #334155;
 }
 
 ::ng-deep.swal2-container {
