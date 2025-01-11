@@ -15,7 +15,8 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { EmprestimoService } from '../../services/emprestimo.service';
 import { IEmprestimo, IEmprestimoResponse } from '../../interfaces/IEmprestimo';
-import e from 'express';
+import { StatusParcelaColorPipe } from '../../pipes/status-parcela-color.pipe';
+import { DataLocPipe } from '../../pipes/dataLOC.pipe';
 
 @Component({
   selector: 'app-emprestimos-cliente',
@@ -30,7 +31,9 @@ import e from 'express';
     IconFieldModule,
     InputIconModule,
     DialogModule,
-    TableModule
+    TableModule,
+    StatusParcelaColorPipe,
+    DataLocPipe
   ],
   providers: [MessageService],
   templateUrl: './emprestimos-cliente.component.html',
@@ -86,7 +89,7 @@ export class EmprestimosClienteComponent {
   }
 
   buscarCliente() {
-    if(this.clienteId) {
+    if (this.clienteId) {
       this.clienteService.buscarClientePorId(this.clienteId).subscribe({
         next: (data) => {
           this.nomeCliente = data.nome;
@@ -124,7 +127,7 @@ export class EmprestimosClienteComponent {
     this.dialogForm = true;
     this.buscarTodosClientes()
   }
-  
+
   abrirDialogEdit(id: number) {
     this.dialogEdit = true;
     this.emprestimoSelecionado = this.emprestimos.find(emp => emp.id == id) || null
@@ -137,7 +140,7 @@ export class EmprestimosClienteComponent {
     this.listaClientesDropdown = [];
     this.emprestimoCalculado = [];
   }
-  
+
   fecharDialogEdit() {
     this.dialogEdit = false
     this.formEmprestimo.reset();
@@ -146,7 +149,7 @@ export class EmprestimosClienteComponent {
 
   montarFormEdicao() {
     this.formEmprestimo.patchValue({
-      // cliente: this.clienteId,
+      cliente: this.clienteId,
       valorEmprestimo: this.emprestimoSelecionado?.valorEmprestado,
       juros: this.emprestimoSelecionado?.taxaJuros,
       totalParcelas: this.emprestimoSelecionado?.totalParcelas
@@ -155,14 +158,13 @@ export class EmprestimosClienteComponent {
   }
 
   calcular() {
-    debugger
-    if(!this.formEmprestimo.valid) {
-      this.messageService.add({severity: 'info', summary: 'Falha ao Calcular', detail: 'Preencha todos os campos para calcular'});
+    if (!this.formEmprestimo.valid) {
+      this.messageService.add({ severity: 'info', summary: 'Falha ao Calcular', detail: 'Preencha todos os campos para calcular' });
       return;
     }
     this.emprestimoCalculado = []
     const quantidadeParcelas = parseFloat(this.formEmprestimo.value.totalParcelas);
-    const juros = this.formEmprestimo.value.juros / 100 ;
+    const juros = this.formEmprestimo.value.juros / 100;
     const valorEmprestado = parseFloat(this.formEmprestimo.value.valorEmprestimo);
     const jurosParcela = parseFloat((valorEmprestado * juros).toFixed(2));
     const valorParcela = parseFloat((valorEmprestado / quantidadeParcelas + jurosParcela).toFixed(2));
@@ -176,7 +178,7 @@ export class EmprestimosClienteComponent {
   }
 
   atribuirPagamento() {
-    
+
   }
 
   buscarEmprestimosPaginado(filtro?: string) {
@@ -188,11 +190,11 @@ export class EmprestimosClienteComponent {
   }
 
   salvarEmprestimo() {
-    if(this.formEmprestimo.valid) {
-      if(!this.idEmprestimoEditando) {
+    if (this.formEmprestimo.valid && this.formEmprestimo.value.valorTotal) {
+      if (!this.idEmprestimoEditando) {
         const emprestimo = {
           id: this.formEmprestimo.value.id,
-          clienteId: this.formEmprestimo.value.cliente,
+          clienteId: this.clienteId,
           valorEmprestado: this.formEmprestimo.value.valorEmprestimo,
           valorTotal: this.formEmprestimo.value.valorTotal,
           totalParcelas: this.formEmprestimo.value.totalParcelas,
@@ -200,14 +202,20 @@ export class EmprestimosClienteComponent {
         }
         this.emprestimoService.salvarEmprestimo(emprestimo).subscribe({
           next: () => {
-            this.messageService.add({severity: 'success', summary: 'Concluído', detail: 'Emprestimo realizado com sucesso'});
+            this.messageService.add({ severity: 'success', summary: 'Concluído', detail: 'Emprestimo realizado com sucesso' });
+            this.buscarEmprestimosPaginado()
+            this.fecharDialogForm()
           }, error: err => {
-            this.messageService.add({severity: 'danger', summary: 'Erro ao Salvar', detail: 'Não foi possível salvar o emprestimo'});
+            this.messageService.add({ severity: 'error', summary: 'Erro ao Salvar', detail: 'Não foi possível salvar o emprestimo' });
           }
         })
       }
     } else {
-      this.messageService.add({ severity: 'danger', summary: 'Observação', detail: 'Por favor, preencha todos os campos obrigatórios' });
+      if (!this.formEmprestimo.value.valorTotal) {
+        this.messageService.add({ severity: 'error', summary: 'Observação', detail: 'Por favor, realize o cálculo antes de salvar' });
+        return;
+      }
+      this.messageService.add({ severity: 'error', summary: 'Observação', detail: 'Por favor, preencha todos os campos obrigatórios' });
     }
   }
 

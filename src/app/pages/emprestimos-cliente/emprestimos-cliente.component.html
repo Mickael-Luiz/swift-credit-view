@@ -14,16 +14,22 @@
     <p-button label="Adicionar" [raised]="true" icon="pi pi-plus" (onClick)="abrirDialogForm()" />
   </div>
 
-  <div class="container-cards flex">
+  <div class="container-cards flex col-12">
     @for(emprestimo of emprestimos; track emprestimo) {
-    <div class="card-emprestimo flex justify-content-between" (click)="abrirDialogEdit(emprestimo.id)">
-      <div class="flex flex-column justify-content-around info">
-        <span style="font-weight: bold; color: white;">{{emprestimo.cliente.nome}}</span>
-        <span>Saldo Devedor: R${{emprestimo.saldoDevedor}}</span>
-        <span>Total: R${{emprestimo.valorTotal}}</span>
-      </div>
-      <div class="flex flex-column align-items-center justify-content-around expand">
-        <i class="pi pi-expand"></i>
+    <div class="card-emprestimo flex col-12 md:col-6 lg:col-4 xl:col-3" (click)="abrirDialogEdit(emprestimo.id)">
+      <div class="flex justify-content-between col-12"
+        [style.background-color]="emprestimo.status | statusParcelaColor: 'backgroundColor'"
+        [style.color]="emprestimo.status | statusParcelaColor: 'color'"
+        [style.border]="emprestimo.status | statusParcelaColor: 'border'"
+        >
+        <div class="flex flex-column justify-content-around info">
+          <span style="font-weight: bold;">Contratação: {{emprestimo.dataContratacao | dataLoc}}</span>
+          <span>Saldo Devedor: R${{emprestimo.saldoDevedor}}</span>
+          <span>Total: R${{emprestimo.valorTotal}}</span>
+        </div>
+        <div class="flex flex-column align-items-center justify-content-around expand">
+          <i class="pi pi-expand"></i>
+        </div>
       </div>
     </div>
     }
