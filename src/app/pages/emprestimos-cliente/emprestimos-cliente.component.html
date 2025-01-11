@@ -18,9 +18,10 @@
     @for(emprestimo of emprestimos; track emprestimo) {
     <div class="card-emprestimo flex col-12 md:col-6 lg:col-4 xl:col-3" (click)="abrirDialogEdit(emprestimo.id)">
       <div class="flex justify-content-between col-12"
-        [style.background-color]="emprestimo.status | statusParcelaColor: 'backgroundColor'"
-        [style.color]="emprestimo.status | statusParcelaColor: 'color'"
-        [style.border]="emprestimo.status | statusParcelaColor: 'border'"
+        [style.background-color]="emprestimo.status | statusEmprestimoColor: 'light'"
+        [style.color]="emprestimo.status | statusEmprestimoColor: 'dark'"
+        [style.border-color]="emprestimo.status | statusEmprestimoColor: 'dark'"
+        [style.box-shadow]="'0px 0px 10px ' + (emprestimo.status | statusEmprestimoColor: 'light')"
         >
         <div class="flex flex-column justify-content-around info">
           <span style="font-weight: bold;">Contratação: {{emprestimo.dataContratacao | dataLoc}}</span>

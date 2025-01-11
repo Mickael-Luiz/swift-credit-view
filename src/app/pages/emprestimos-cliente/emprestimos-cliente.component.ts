@@ -15,7 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { EmprestimoService } from '../../services/emprestimo.service';
 import { IEmprestimo, IEmprestimoResponse } from '../../interfaces/IEmprestimo';
-import { StatusParcelaColorPipe } from '../../pipes/status-parcela-color.pipe';
+import { StatusEmprestimoColorPipe } from '../../pipes/status-emprestimo-color.pipe';
 import { DataLocPipe } from '../../pipes/dataLOC.pipe';
 
 @Component({
@@ -32,7 +32,7 @@ import { DataLocPipe } from '../../pipes/dataLOC.pipe';
     InputIconModule,
     DialogModule,
     TableModule,
-    StatusParcelaColorPipe,
+    StatusEmprestimoColorPipe,
     DataLocPipe
   ],
   providers: [MessageService],
@@ -72,7 +72,7 @@ export class EmprestimosClienteComponent {
   ngOnInit() {
     this.clienteId = Number(this.activatedRoute.snapshot.paramMap.get('id'));
     this.clienteId && this.buscarCliente();
-    this.buscarEmprestimosPaginado()
+    this.buscarEmprestimos()
   }
 
   criarForms() {
@@ -181,8 +181,8 @@ export class EmprestimosClienteComponent {
 
   }
 
-  buscarEmprestimosPaginado(filtro?: string) {
-    this.emprestimoService.listarEmprestimos(this.clienteId).subscribe({
+  buscarEmprestimos(filtro?: string) {
+    this.emprestimoService.listarEmprestimosPorCliente(this.clienteId).subscribe({
       next: (data) => {
         this.emprestimos = data;
       }
@@ -203,7 +203,7 @@ export class EmprestimosClienteComponent {
         this.emprestimoService.salvarEmprestimo(emprestimo).subscribe({
           next: () => {
             this.messageService.add({ severity: 'success', summary: 'Concluído', detail: 'Emprestimo realizado com sucesso' });
-            this.buscarEmprestimosPaginado()
+            this.buscarEmprestimos()
             this.fecharDialogForm()
           }, error: err => {
             this.messageService.add({ severity: 'error', summary: 'Erro ao Salvar', detail: 'Não foi possível salvar o emprestimo' });

@@ -14,8 +14,8 @@ export class EmprestimoService {
 
   constructor(private http: HttpClient) {}
 
-  listarEmprestimos(clienteId: number): Observable<IEmprestimoResponse[]> {
-    return this.http.get<IEmprestimoResponse[]>(`${this.apiUrl}?${clienteId}`);
+  listarEmprestimosPorCliente(clienteId: number): Observable<IEmprestimoResponse[]> {
+    return this.http.get<IEmprestimoResponse[]>(`${this.apiUrl}?clienteId=${clienteId}`);
   }
 
   buscarPorId(emprestimoId: number): Observable<IEmprestimoResponse> {
