@@ -15,7 +15,7 @@ export class SidebarComponent {
 
   listaMenu: CustomMenuItem[] = [
     { label: 'Dashboard', icon: 'fa-chart-pie', routerLink: 'home' },
-    { label: 'Clientes', icon: 'fa-users', routerLink: 'clientes' },
+    { label: 'Clientes', icon: 'fa-users', routerLink: 'clientes' }
   ]
 
 

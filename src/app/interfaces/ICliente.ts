@@ -8,7 +8,7 @@ export interface ICliente {
   complemento: string,
   numero: string,
   confiabilidade: string,
-  recomendante: IClienteDTO,
+  recomendante: string,
 }
 
 export interface IClienteDTO {

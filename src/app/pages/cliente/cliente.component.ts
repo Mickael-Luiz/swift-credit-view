@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ClienteService } from '../../services/cliente.service';
 import { HttpClientModule } from '@angular/common/http';
-import { ICliente, IClienteDropdownDTO } from '../../interfaces/ICliente';
+import { ICliente } from '../../interfaces/ICliente';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,6 +18,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cliente',
@@ -38,7 +40,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputMaskModule,
     AutoCompleteModule,
     ToastModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    TooltipModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './cliente.component.html',
@@ -47,8 +50,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 export class ClienteComponent {
 
   clientes: ICliente[] = [];
-  listaClientesDropdown: IClienteDropdownDTO[] = [];
-  listaClientesDropdownFiltrados: IClienteDropdownDTO[] = [];
   clientesSelecionados: ICliente[] = [];
   niveisConfiabilidade = [
     { id: 1, desc: 'Baixa' },
@@ -70,7 +71,8 @@ export class ClienteComponent {
     private clienteService: ClienteService,
     private fb: FormBuilder,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -109,7 +111,6 @@ export class ClienteComponent {
   limparFormFiltro() {
     this.formFiltro.get('search')?.setValue('')
     this.buscarClientesPaginado()
-    this.listaClientesDropdown = []
   }
 
   abrirDialogClientes(id?: number) {
@@ -134,20 +135,6 @@ export class ClienteComponent {
 
   emptyStars(confiabilidade: number): number[] {
     return Array.from({ length: 5 - confiabilidade }, () => 0);
-  }
-
-  filterCountry(event: any) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.listaClientesDropdown as any[]).length; i++) {
-      let cliente = (this.listaClientesDropdown as any[])[i];
-      if (cliente.nome.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-        filtered.push(cliente);
-      }
-    }
-
-    this.listaClientesDropdownFiltrados = filtered;
   }
 
   buscarClientesPaginado(infoPage?: any) {
@@ -236,6 +223,10 @@ export class ClienteComponent {
         return;
       }
     })
+  }
+
+  navigate(id: number, rota: string) {
+    this.router.navigate([`/clientes/${id}/${rota}`])
   }
 
 }

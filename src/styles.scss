@@ -49,7 +49,6 @@ button {
 div.p-element.p-multiselect-label-container>div, .p-dropdown, .p-autocomplete {
     display: flex;
     height: 32.5px;
-    // padding: 0 5px;
     align-items: center;
 }
 
@@ -82,12 +81,6 @@ tr {
         border: none;
     }
 
-    .p-button-rounded {
-        border-radius: 50%;
-        height: 26px;
-        width: 26px;
-        font-size: 12px;
-    }
 
     .pi-pencil:before {
         content: "\e942";
@@ -109,8 +102,9 @@ tr {
 
 .p-button-rounded {
     border-radius: 50%;
-    height: 32.5px;
-    width: 32.5px;
+    height: 26px;
+    width: 26px;
+    font-size: 12px;
 }
 
 .p-button.p-button-danger.p-button-text:not(:disabled):hover {
@@ -124,4 +118,8 @@ tr {
 .p-button.p-button-secondary:hover {
     background-color: #e2e8f0;
     color: #334155;
+}
+
+:root {
+    --cor-primaria: #3b82f6;
 }

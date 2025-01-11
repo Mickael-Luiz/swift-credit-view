@@ -1,0 +1,144 @@
+<div class="container-cliente flex flex-column gap-4">
+  <span class="span-filtro">Histórico de
+    @if(nomeCliente) {
+    <span style="color: var(--cor-primaria);">{{nomeCliente}}</span>
+    } @else {
+    Empréstimos
+    }
+  </span>
+  <div class="container-filtro flex align-items-center justify-content-between">
+    <p-iconField iconPosition="left">
+      <p-inputIcon styleClass="pi pi-search" />
+      <input type="text" pInputText placeholder="Search" style="width: 350px;" />
+    </p-iconField>
+    <p-button label="Adicionar" [raised]="true" icon="pi pi-plus" (onClick)="abrirDialogForm()" />
+  </div>
+
+  <div class="container-cards flex">
+    @for(emprestimo of emprestimos; track emprestimo) {
+    <div class="card-emprestimo flex justify-content-between" (click)="abrirDialogEdit(emprestimo.id)">
+      <div class="flex flex-column justify-content-around info">
+        <span style="font-weight: bold; color: white;">{{emprestimo.cliente.nome}}</span>
+        <span>Saldo Devedor: R${{emprestimo.saldoDevedor}}</span>
+        <span>Total: R${{emprestimo.valorTotal}}</span>
+      </div>
+      <div class="flex flex-column align-items-center justify-content-around expand">
+        <i class="pi pi-expand"></i>
+      </div>
+    </div>
+    }
+  </div>
+
+</div>
+
+
+<!-- DIALOG NOVO EMPRESTIMO -->
+<p-dialog header="Novo Emprestimo" [modal]="true" [(visible)]="dialogForm" (onHide)="fecharDialogForm()"
+  [style]="{ width: '50rem' }" [maximizable]="true">
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <span class="font-bold white-space-nowrap">
+        Novo Empréstimo
+      </span>
+    </div>
+  </ng-template>
+
+  <form [formGroup]="formEmprestimo" class="flex flex-column col-12 align-items-end justify-content-center">
+    <!-- <div class="flex flex-column col-12 gap-1">
+      <label for="nome">Cliente</label>
+      <p-autoComplete [suggestions]="listaClientesDropdownFiltrados" (completeMethod)="filterCountry($event)"
+      optionLabel="nome" optionValue="id" formControlName="cliente" />
+    </div> -->
+    <div class="flex flex-wrap" style="padding: 0;">
+      <div class="flex flex-column col-12 sm:col-6 md:col-6 gap-1">
+        <label for="valorEmprestimo">Valor do Empréstimo</label>
+        <input pInputText id="valorEmprestimo" placeholder="R$00,00" formControlName="valorEmprestimo" />
+      </div>
+      <div class="flex flex-column col-6 sm:col-3 md:col-3 gap-1">
+        <label for="juros">Juros</label>
+        <input pInputText id="juros" formControlName="juros" />
+      </div>
+      <div class="flex flex-column col-6 sm:col-3 md:col-3 gap-1">
+        <label for="quantParcelas">Parcelas</label>
+        <input pInputText id="quantParcelas" placeholder="--" formControlName="totalParcelas" />
+      </div>
+      <div class="flex col-12 justify-content-end">
+        <p-button label="Calcular" [raised]="true" icon="pi pi-calculator" (onClick)="calcular()" />
+      </div>
+    </div>
+
+  </form>
+
+  @if(emprestimoCalculado.length > 0) {
+  <div class="table">
+    <p-table [value]="emprestimoCalculado" [tableStyle]="{ 'min-width': '100%' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="text-align: center; background-color: #21509b; color: white;">Parcelas</th>
+          <th style="text-align: center; background-color: #21509b; color: white;">Valor Parcelas</th>
+          <th style="text-align: center; background-color: #21509b; color: white;">Juros Mensal</th>
+          <th style="text-align: center; background-color: #21509b; color: white;">Juros Total</th>
+          <th style="text-align: center; background-color: #21509b; color: white;">Valor Total</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-emprestimo>
+        <tr>
+          <td style="text-align: center;">{{ emprestimo.totalParcelas }}</td>
+          <td style="text-align: center;">R$ {{ emprestimo.valorParcela }}</td>
+          <td style="text-align: center;">R$ {{ emprestimo.jurosParcela }}</td>
+          <td style="text-align: center;">R$ {{ emprestimo.jurosTotal }}</td>
+          <td style="text-align: center;">R$ {{ emprestimo.valorTotal }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  }
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancelar" severity="secondary" (onClick)="fecharDialogForm()" />
+    <p-button label="Salvar" (onClick)="salvarEmprestimo()" />
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Editar Emprestimo" [modal]="true" [(visible)]="dialogEdit" (onHide)="fecharDialogEdit()"
+  [style]="{ width: '50rem' }" [maximizable]="true">
+
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <span class="font-bold white-space-nowrap">
+        Emprestimo: {{emprestimoSelecionado?.id}}
+      </span>
+    </div>
+  </ng-template>
+
+  <p-table [value]="emprestimoCalculado" [tableStyle]="{ 'min-width': '100%' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="text-align: center; background-color: #21509b; color: white;">Parcelas</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Valor Parcelas</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Juros Mensal</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Juros Total</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Valor Total</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-emprestimo>
+      <tr>
+        <td style="text-align: center;">{{ emprestimo.totalParcelas }}</td>
+        <td style="text-align: center;">R$ {{ emprestimo.valorParcela }}</td>
+        <td style="text-align: center;">R$ {{ emprestimo.jurosParcela }}</td>
+        <td style="text-align: center;">R$ {{ emprestimo.jurosTotal }}</td>
+        <td style="text-align: center;">R$ {{ emprestimo.valorTotal }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div style="margin-top: 30px;">
+    <p-button label="Atribuir Pagamento" (onClick)="atribuirPagamento()" />
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Salvar" (onClick)="salvarEmprestimo()" />
+  </ng-template>
+
+</p-dialog>
+<p-toast />
