@@ -50,12 +50,7 @@
     </div>
   </ng-template>
 
-  <form [formGroup]="formEmprestimo" class="flex flex-column col-12 align-items-end justify-content-center">
-    <!-- <div class="flex flex-column col-12 gap-1">
-      <label for="nome">Cliente</label>
-      <p-autoComplete [suggestions]="listaClientesDropdownFiltrados" (completeMethod)="filterCountry($event)"
-      optionLabel="nome" optionValue="id" formControlName="cliente" />
-    </div> -->
+  <form [formGroup]="formEmprestimo" class="flex flex-column col-12 align-items-end justify-content-center" style="border: 2px dashed var(--cor-primaria);">
     <div class="flex flex-wrap" style="padding: 0;">
       <div class="flex flex-column col-12 sm:col-6 md:col-6 gap-1">
         <label for="valorEmprestimo">Valor do Empréstimo</label>
@@ -108,7 +103,7 @@
 </p-dialog>
 
 <p-dialog header="Editar Emprestimo" [modal]="true" [(visible)]="dialogEdit" (onHide)="fecharDialogEdit()"
-  [style]="{ width: '50rem' }" [maximizable]="true">
+  [style]="{ width: '60rem' }" [maximizable]="true">
 
   <ng-template pTemplate="header">
     <div class="inline-flex align-items-center justify-content-center gap-2">
@@ -118,23 +113,29 @@
     </div>
   </ng-template>
 
-  <p-table [value]="emprestimoCalculado" [tableStyle]="{ 'min-width': '100%' }">
+  <p-table [value]="parcelas" [tableStyle]="{ 'min-width': '100%' }">
     <ng-template pTemplate="header">
       <tr>
-        <th style="text-align: center; background-color: #21509b; color: white;">Parcelas</th>
-        <th style="text-align: center; background-color: #21509b; color: white;">Valor Parcelas</th>
-        <th style="text-align: center; background-color: #21509b; color: white;">Juros Mensal</th>
-        <th style="text-align: center; background-color: #21509b; color: white;">Juros Total</th>
-        <th style="text-align: center; background-color: #21509b; color: white;">Valor Total</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">N° Parcela</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Situação</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Valor Parcela</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Valor Pago</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Em Aberto</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Data Vencimento</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Data de Pagamento</th>
+        <th style="text-align: center; background-color: #21509b; color: white;">Multa</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-emprestimo>
+    <ng-template pTemplate="body" let-parcela let-rowIndex="rowIndex">
       <tr>
-        <td style="text-align: center;">{{ emprestimo.totalParcelas }}</td>
-        <td style="text-align: center;">R$ {{ emprestimo.valorParcela }}</td>
-        <td style="text-align: center;">R$ {{ emprestimo.jurosParcela }}</td>
-        <td style="text-align: center;">R$ {{ emprestimo.jurosTotal }}</td>
-        <td style="text-align: center;">R$ {{ emprestimo.valorTotal }}</td>
+        <td style="text-align: center;">{{ parcela.numeroParcela }}</td>
+        <td style="text-align: center;">{{ parcela.status }}</td>
+        <td style="text-align: center;">R${{ parcela.valorOriginal }}</td>
+        <td style="text-align: center;">R${{ parcela.valorPago }}</td>
+        <td style="text-align: center;">R${{ parcela.valorFaltante }}</td>
+        <td style="text-align: center;">{{ parcela.dataVencimento | dataLoc }}</td>
+        <td style="text-align: center;">{{ parcela.dataPagamento ? (parcela.dataPagamento | dataLoc) : '--'}}</td>
+        <td style="text-align: center;">R${{ parcela.jurosAtraso }}</td>
       </tr>
     </ng-template>
   </p-table>
